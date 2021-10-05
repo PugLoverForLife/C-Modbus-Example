@@ -1,6 +1,16 @@
+#include <Arduino.h>
 #include <modbusDevice.h>
 #include <modbusRegBank.h>
 #include <modbusSlave.h>
+
+void setup()
+{
+
+}
+void loop()
+{
+
+}
 
 modbusDevice regBank;
 modbusSlave slave;
@@ -8,7 +18,7 @@ modbusSlave slave;
 #define RedPin 12
 #define YellowPin 11
 #define GreenPin 10
-
+/*
 void setup()
 {   
   regBank.setId(1); ///Set Slave ID
@@ -41,3 +51,4 @@ void loop(){
 
 slave.run(); 
 }
+*/
