@@ -58,37 +58,42 @@ void setup()
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
 
-    //Serial.begin(115200); // Serial should already be going
     node.begin(9600);
 
     //node.preTransmission(); Need to add something because library does not ahave this for some reason. Line 730 modbusmaster.cpp
     //node.postTransmission();
-    
-    //Example write
-    uint16_t address = 0x0001;
-    int value = 1;
-    node.writeSingleRegister(address, value);
-
-    //Example read
-    
-    uint16_t qty = 1;
-    node.readHoldingRegisters(address, qty);
-    for(int i = 0; i <= node._u8ResponseBufferLength; i++) // Unnecessary but the actual buffer is private. May change later.
-    {
-      readBuffer[i] = node.getResponseBuffer(i);
-    }
     
   }
 }
 
 void loop(){
 
-Serial.println("Updating registry");
-regUpdate();
+  if(MASTER_SETUP == 0)
+  {
+    Serial.println("Updating registry");
+    regUpdate();
 
-delay(1000);
+    slave.run();
+  }
+  else
+  {
+    //Example write
+    uint16_t address = 0x0001;
+    int value = 1;
+    node.writeSingleRegister(address, value);
+    
+    //Example read
+    uint16_t qty = 1;
+    node.readHoldingRegisters(address, qty);
+    for(int i = 0; i <= node._u8ResponseBufferLength; i++) // Unnecessary but the actual buffer is private. May change later.
+    {
+      readBuffer[i] = node.getResponseBuffer(i);
+      
+    }
+    
+  }
+  delay(1000);
 
-slave.run(); 
 }
 
 void regUpdate(){
