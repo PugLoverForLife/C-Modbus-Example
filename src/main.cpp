@@ -32,6 +32,7 @@ void postTransmission();
 void setup()
 { 
   if (MASTER_SETUP == 0) // If system will be a slave
+  // https://www.youtube.com/watch?v=wKPNcE51YUk
   {
     regBank.setId(1); ///Set Slave ID
 
@@ -48,6 +49,7 @@ void setup()
     slave.setBaud(9600);
   }
   else // If system will be a master
+  // https://circuitdigest.com/microcontroller-projects/rs-485-modbus-serial-communication-with-arduino-as-master
   {
 
     pinMode(MAX485_RE_NEG, OUTPUT);
@@ -56,11 +58,12 @@ void setup()
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
 
-    //Serial.begin(115200); Serial should already be going
+    //Serial.begin(115200); // Serial should already be going
     node.begin(9600);
 
     //node.preTransmission(); Need to add something because library does not ahave this for some reason. Line 730 modbusmaster.cpp
     //node.postTransmission();
+    
     //Example write
     uint16_t address = 0x0001;
     int value = 1;
