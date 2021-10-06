@@ -256,7 +256,7 @@ void modbusSlave::run(void)
 	
 	int i;
 	
-	//initialize mesasge length
+	//initialize message length
 	_len = 0;
 
 	//check for data in the recieve buffer
@@ -271,8 +271,7 @@ void modbusSlave::run(void)
 	//retrieve the query message from the serial uart
 	this->serialRx();
 	
-	//if the message id is not 255, and
-	// and device id does not match bail
+	//if the message id is not 255 and device id does not match, bail
 	if( (_msg[0] != 0xFF) && 
 		(_msg[0] != _device->getId()) )
 	{

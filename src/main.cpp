@@ -23,7 +23,7 @@ void loop(){
 
   if(MASTER_SETUP == 0)
   {
-    slave.run();
+    slave.run(); // Checks for a communication on the Serial line and decodes as necessary
   }
   else
   {
