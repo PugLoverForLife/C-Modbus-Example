@@ -36,8 +36,8 @@ void setup()
   {
     regBank.setId(1); ///Set Slave ID
 
-    regBank.add(1); // Command
-    //regBank.add(2);//Yellow
+    regBank.add(COMMAND); // Command
+    regBank.add(PARAMETER); // Parameter
     //regBank.add(3);//Green
 
     pinMode(RedPin,OUTPUT);//Red Light
@@ -46,7 +46,7 @@ void setup()
     
   
     slave._device = &regBank; 
-    slave.setBaud(9600);
+    slave.setBaud(9600); // Will want something higher for the real thing
   }
   else // If system will be a master
   // https://circuitdigest.com/microcontroller-projects/rs-485-modbus-serial-communication-with-arduino-as-master
@@ -58,10 +58,10 @@ void setup()
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
 
-    node.begin(9600);
+    node.begin(9600); // Will want something higher for the real thing
 
-    //node.preTransmission(); Need to add something because library does not ahave this for some reason. Line 730 modbusmaster.cpp
-    //node.postTransmission();
+    // https://protosupplies.com/product/max485-ttl-to-rs-485-interface-module/ 
+    node.assignFunctions(&preTransmission, &postTransmission); 
     
   }
 }
@@ -81,7 +81,16 @@ void loop(){
     uint16_t address = 0x0001;
     int value = 1;
     node.writeSingleRegister(address, value);
-    
+    // Could either read slave's message or clear the response buffer
+    node.clearResponseBuffer();
+    /*
+    for(int i = 0; i <= node._u8ResponseBufferLength; i++) // Unnecessary but the actual buffer is private. May change later.
+    {
+      readBuffer[i] = node.getResponseBuffer(i);
+      
+    }
+    */
+
     //Example read
     uint16_t qty = 1;
     node.readHoldingRegisters(address, qty);
@@ -97,7 +106,7 @@ void loop(){
 }
 
 void regUpdate(){
-  for (int i = REGISTRY_START; i < INTERNAL_REGISTERS; i++)
+  for (int i = REGISTRY_START + 1; i < INTERNAL_REGISTERS; i++)
   {
     theRegistry[i] = regBank.get(i);
   }
@@ -118,11 +127,14 @@ void regUpdate(){
       */
 }
 
+// Message to go out
 void preTransmission()
 {
   digitalWrite(MAX485_RE_NEG, 1);
   digitalWrite(MAX485_DE, 1);
 }
+
+// Message to come in
 void postTransmission()
 {
   digitalWrite(MAX485_RE_NEG, 0);

@@ -8,6 +8,7 @@ namespace Reg {
 enum NDX {
     REGISTRY_START,     // *** BEGIN MODBUS RECIEVE DATA ***
     COMMAND,
+    PARAMETER,
     INTERNAL_REGISTERS,                    // *** BEGIN INTERNAL REGISTERS ***
     EXAMPLE_REGISTER,
     REGISTRY_END

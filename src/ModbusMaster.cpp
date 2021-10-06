@@ -726,6 +726,8 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   u8ModbusADU[u8ModbusADUSize++] = highByte(u16CRC);
   u8ModbusADU[u8ModbusADUSize] = 0;
   
+  _preTrans(); // Set DE and RE high to send to slave
+
   // transmit request
   for (i = 0; i < u8ModbusADUSize; i++)
   {
@@ -739,6 +741,8 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   u8ModbusADUSize = 0;
   Serial.flush();
   
+  _postTrans(); // Set DE and RE low to recieve from slave
+
   // loop until we run out of time or bytes, or an error occurs
   u32StartTime = millis();
   while (u8BytesLeft && !u8MBStatus)
@@ -905,4 +909,10 @@ uint16_t ModbusMaster::crc16_update(uint16_t crc, uint8_t a) {
     }
 
     return crc;
+}
+
+void ModbusMaster::assignFunctions(void (*preTrans)(), void (*postTrans)())
+{
+  _preTrans = preTrans;
+  _postTrans = postTrans;
 }

@@ -98,6 +98,7 @@ class ModbusMaster
     void begin();
     void begin(uint16_t);
     void idle(void (*)());
+    void assignFunctions(void (*preTrans)(), void (*postTrans)());
     uint16_t crc16_update(uint16_t crc, uint8_t a);
     
     // Modbus exception codes
@@ -262,6 +263,8 @@ class ModbusMaster
     uint16_t u16TransmitBufferLength;
     uint16_t* rxBuffer; // from Wire.h -- need to clean this up Rx
     uint8_t _u8ResponseBufferIndex;
+    void (*_preTrans)();
+    void (*_postTrans)();
     
     
     // Modbus function codes for bit access
