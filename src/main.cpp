@@ -10,13 +10,13 @@ Description:
   with the MAX485 TTL to RS-485 Interface Module by using UART0 and pins 2 and 3.
 
 To Do:
-  - Test with modbus slave/master program on computer.
-  - Check connection stability when run as a RTOS thread.
-  - Increase baud rate to higher value.
+  - Test with Modbus slave/master program on the computer.
+  - Check connection stability when run as an RTOS thread.
+  - Increase baud rate to a higher value.
   - Test system with the compatible Interface Module.
-  - Clean up included libraries to increase efficiency (space & speed).
-  - Work with MODBUS commands nad make a sparsing algorithm.
-  - Add ability to switch between master and slave during runtime.
+  - Clean-up included libraries to increase efficiency (space & speed).
+  - Work with MODBUS commands and make a sparsing algorithm.
+  - Add the ability to switch between master and slave during runtime.
 
 Strech Goals:
   - Test different communication protocols (I2C & SPI).
