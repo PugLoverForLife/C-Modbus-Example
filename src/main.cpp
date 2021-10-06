@@ -1,3 +1,27 @@
+/*
+Author: Devin Himmelheber
+Date: 10/6/2021
+Version: 1.0.0
+Description: 
+  Demo code to run on Sparkfun's Artemis ATP for modbus master/slave control over serial.
+  System mode is determined by Global Control Variable "MASTER_SETUP". When the GCV is set to 0, 
+  the system will be running in slave mode with ID set to 1 and a baud rate of 9600. When the GCV
+  is set to 1, the system will be running in master mode with a baud rate of 9600 and is compatible
+  with the MAX485 TTL to RS-485 Interface Module by using UART0 and pins 2 and 3.
+
+To Do:
+  - Test with modbus slave/master program on computer.
+  - Check connection stability when run as a RTOS thread.
+  - Increase baud rate to higher value.
+  - Test system with the compatible Interface Module.
+  - Clean up included libraries to increase efficiency (space & speed).
+  - Work with MODBUS commands nad make a sparsing algorithm.
+  - Add ability to switch between master and slave during runtime.
+
+Strech Goals:
+  - Test different communication protocols (I2C & SPI).
+*/
+
 #include <Arduino.h>
 #include <modbusDevice.h>
 #include <modbusRegBank.h>
@@ -5,6 +29,10 @@
 #include <ModbusMaster.h>
 
 #include <Registry.h>
+
+/* *** Global Control Variable *** */
+#define MASTER_SETUP  0
+
 
 modbusDevice regBank;
 modbusSlave slave;
@@ -17,7 +45,6 @@ ModbusMaster node;
 #define MAX485_DE     3
 #define MAX485_RE_NEG 2
 
-#define MASTER_SETUP  0
 #define MAXBUFFERSIZE 64
 
 uint16_t readBuffer[MAXBUFFERSIZE] = {0};
