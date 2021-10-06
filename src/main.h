@@ -8,9 +8,14 @@
 #include <ModbusMaster.h>
 
 /* *** Global Control Variable *** */
-#define MASTER_SETUP  1
+#define MASTER_SETUP RUNTIME_DECISION
 
+// GCV options
+#define RUNTIME_DECISION 0
+#define SLAVE_START_UP 1
+#define MASTER_START_UP 2
 
+// Object creation
 modbusDevice registerBank;
 modbusSlave slave;
 ModbusMaster node;
@@ -23,6 +28,9 @@ ModbusMaster node;
 #define YellowPin     11
 #define RedPin        12
 
+#define Decision_EN   27
+#define Decision_Pin  28
+
 // Adjustable program parameters
 #define MAX_BUFFER_SIZE 64
 #define BAUD_RATE 9600
@@ -31,9 +39,13 @@ ModbusMaster node;
 // Buffers
 uint16_t readBuffer[MAX_BUFFER_SIZE] = {0};
 
+// Globals
+int master_Setup_Override;
+
 // Prototypes
 void slaveSetup();
 void masterSetup();
+void runtime_decision();
 void readReply(uint16_t readBuffer[]);
 
 enum NDX {

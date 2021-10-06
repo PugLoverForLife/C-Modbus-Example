@@ -15,18 +15,27 @@ Description:
 
 void setup()
 { 
-  if (MASTER_SETUP == 0) { slaveSetup(); } // If system will be a slave
-  else { masterSetup(); } // If system will be a master
+  if (MASTER_SETUP == SLAVE_START_UP) { slaveSetup(); } // If system will be a slave
+  else if (MASTER_SETUP == MASTER_START_UP) { masterSetup(); } // If system will be a master
+  else // System configuration will be decided at runtime
+  { 
+    runtime_decision(); 
+    if (master_Setup_Override == SLAVE_START_UP){ slaveSetup(); }
+    else { masterSetup(); }
+  } 
 }
 
 void loop(){
 
-  if(MASTER_SETUP == 0)
+  if(MASTER_SETUP == SLAVE_START_UP or master_Setup_Override == SLAVE_START_UP)
   {
+    Serial.println("Slave heartbeat");
     slave.run(); // Checks for a communication on the Serial line and decodes as necessary
   }
   else
   {
+    Serial.println("Master heartbeat");
+
     //Example write
     uint16_t address = 0x0001;
     int value = 1;
@@ -74,6 +83,30 @@ void masterSetup()
 
   // https://protosupplies.com/product/max485-ttl-to-rs-485-interface-module/ 
   node.assignFunctions(&preTransmission, &postTransmission);
+}
+
+void runtime_decision()
+{
+  pinMode(Decision_EN, INPUT);
+  pinMode(Decision_Pin, INPUT);
+
+  Serial.println("Ready for enable");
+  while (digitalRead(Decision_EN) != 1)
+  {
+    delay(100);
+  }
+  
+  if (digitalRead(Decision_Pin) == 0)
+  { 
+    Serial.println("Slave configuration selected");
+    master_Setup_Override = SLAVE_START_UP; 
+  }
+  else
+  { 
+    Serial.println("Master configuration selected");
+    master_Setup_Override = MASTER_START_UP; 
+  }
+
 }
 
 void readReply(uint16_t readBuffer[])
