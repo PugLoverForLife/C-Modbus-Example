@@ -1,13 +1,16 @@
 /*
 Author: Devin Himmelheber
 Date: 10/6/2021
-Version: 1.0.1
+Version: 1.0.2
 Description: 
   Demo code to run on Sparkfun's Artemis ATP for modbus master/slave control over serial.
-  System mode is determined by Global Control Variable "MASTER_SETUP". When the GCV is set to 0, 
-  the system will be running in slave mode with ID set to 1 and a baud rate of 9600. When the GCV
-  is set to 1, the system will be running in master mode with a baud rate of 9600 and is compatible
-  with the MAX485 TTL to RS-485 Interface Module by using UART0 and pins 2 and 3.
+  System mode is determined by Global Control Variable "MASTER_SETUP". When the GCV is set to SLAVE_START_UP, 
+  the system will be running in slave mode with ID set to 1 and a baud rate of 9600. When the GCV is set to 
+  MASTER_START_UP, the system will be running in master mode with a baud rate of 9600 and is compatible
+  with the MAX485 TTL to RS-485 Interface Module by using UART0 and pins 2 and 3. If the GCV is set to 
+  RUNTIME_DECISION, the system will look to the enable and decision pin to choose a mode. If the decision 
+  pin is pulled HIGH, the system is set to Master mode, and the system is set to Slave mode if the decision 
+  pin is pulled LOW. 
 */
 
 #include <main.h>
