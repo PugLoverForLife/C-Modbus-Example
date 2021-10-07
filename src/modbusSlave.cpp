@@ -275,6 +275,7 @@ void modbusSlave::run(void)
 	if( (_msg[0] != 0xFF) && 
 		(_msg[0] != _device->getId()) )
 	{
+		Serial.println("?");
 		return;
 	}
 	//calculate the checksum of the query message minus the checksum it came with.

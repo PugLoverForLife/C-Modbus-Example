@@ -8,7 +8,7 @@
 #include <ModbusMaster.h>
 
 /* *** Global Control Variable *** */
-#define MASTER_SETUP RUNTIME_DECISION
+#define MASTER_SETUP SLAVE_START_UP
 
 // GCV options
 #define RUNTIME_DECISION 0
@@ -42,11 +42,14 @@ uint16_t readBuffer[MAX_BUFFER_SIZE] = {0};
 // Globals
 int master_Setup_Override;
 
+rtos::Thread ThreadTester;
+
 // Prototypes
 void slaveSetup();
 void masterSetup();
 void runtime_decision();
 void readReply(uint16_t readBuffer[]);
+void threadTester();
 
 enum NDX {
     REGISTRY_START,     // *** BEGIN MODBUS RECIEVE DATA ***

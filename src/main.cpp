@@ -26,19 +26,22 @@ void setup()
     if (master_Setup_Override == SLAVE_START_UP){ slaveSetup(); }
     else { masterSetup(); }
   } 
+  //ThreadTester.start(threadTester);
+  Serial.println("Starting Loop");
+  delay(25);
 }
 
 void loop(){
 
   if(MASTER_SETUP == SLAVE_START_UP or master_Setup_Override == SLAVE_START_UP)
   {
-    Serial.println("Slave heartbeat");
+    //Serial.println("Slave heartbeat");
     slave.run(); // Checks for a communication on the Serial line and decodes as necessary
   }
   else
   {
-    Serial.println("Master heartbeat");
-
+    //Serial.println("Master heartbeat");
+    
     //Example write
     uint16_t address = 0x0001;
     int value = 1;
@@ -52,7 +55,7 @@ void loop(){
     
   }
   
-  delay(1000);
+  delay(200);
 }
 
 void slaveSetup()
@@ -71,6 +74,7 @@ void slaveSetup()
 
   slave._device = &registerBank; 
   slave.setBaud(BAUD_RATE); // Will want something higher for the real thing
+  Serial.println("Slave setup");
 }
 
 void masterSetup()
@@ -120,4 +124,13 @@ void readReply(uint16_t readBuffer[])
     }
 
     node.clearResponseBuffer();
+}
+
+void threadTester()
+{
+  while(true)
+  {
+    slave.run();
+    delay(1000);
+  }
 }

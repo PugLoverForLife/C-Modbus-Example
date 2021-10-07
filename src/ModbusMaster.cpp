@@ -732,12 +732,13 @@ uint8_t ModbusMaster::ModbusMasterTransaction(uint8_t u8MBFunction)
   for (i = 0; i < u8ModbusADUSize; i++)
   {
 #if defined(ARDUINO) && ARDUINO >= 100
-    Serial.write(u8ModbusADU[i]);
+    Serial.write(u8ModbusADU[i]); // For RTU sends
+    //Serial.printf("%d", u8ModbusADU[i]); // For ASCII sends
 #else
     Serial.print(u8ModbusADU[i], BYTE);
 #endif
   }
-  
+
   u8ModbusADUSize = 0;
   Serial.flush();
   
